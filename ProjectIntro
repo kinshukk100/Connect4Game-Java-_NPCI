@@ -1,0 +1,153 @@
+package Connect4Game;
+
+import java.util.Scanner;
+
+public class Connect4 {
+
+    private String board[][] = new String[7][6];
+    private boolean isPlayer1 = true;
+    private int counter = 0;
+    private int rowCounter[] = {7,7,7,7,7,7};
+
+    private void startTheGame(){
+        if(this.counter == 42){
+            System.out.println("The Game is over. It's a draw");
+            return;
+        }
+
+        if(isPlayer1){
+            System.out.println("Player1 please make a choice");
+        }
+        else{
+            System.out.println("Player2 please make a choice");
+        }
+
+        String column = new Scanner(System.in).nextLine();
+
+        if(isValid(column)){
+            int col = column.charAt(column.length()-1) - '0';
+        }
+        else{
+            column = new Scanner(System.in).nextLine();
+        }
+    }
+
+    public boolean isValid(String column){
+        if(column.equals("")){
+            System.out.println("Please give some input ");
+        }
+    }
+
+    public boolean isFilledDiagonal(int row, int column, String color){
+        int count = 1;
+
+        for(int i=row-1; i>=0; i--){
+            for(int j=column-1; j>=0; j--){
+                if(this.board[i][j].equals(color)){
+                    count++;
+                    if(count  == 4){
+                        return true;
+                    }
+                }
+                else
+                    break;
+            }
+        }
+
+        for(int i=row-1; i>=0; i--){
+            for(int j=column+1; j<6; j++){
+                if(this.board[i][j].equals(color)){
+                    count++;
+                    if(count  == 4){
+                        return true;
+                    }
+                }
+                else
+                    break;
+            }
+        }
+
+        for(int i=row+1; i<7; i++){
+            for(int j=column-1; j>=0; j--){
+                if(this.board[i][j].equals(color)){
+                    count++;
+                    if(count  == 4){
+                        return true;
+                    }
+                }
+                else
+                    break;
+            }
+        }
+
+        for(int i=row+1; i<7; i++){
+            for(int j=column+1; j<6; j++){
+                if(this.board[i][j].equals(color)){
+                    count++;
+                    if(count  == 4){
+                        return true;
+                    }
+                }
+                else
+                    break;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isFilledRow(int row, int column, String color){
+        int count = 1;
+
+        for(int col = column -1; col>=0;col--){
+            if(this.board[row][col].equals(color)){
+                count++;
+                if(count  == 4){
+                    return true;
+                }
+            }
+            else
+                break;
+        }
+
+        for(int col = column+1; col<6;col++){
+            if(this.board[row][col].equals(color)){
+                count++;
+                if(count  == 4){
+                    return true;
+                }
+            }
+            else
+                break;
+        }
+        return false;
+    }
+
+    public boolean isFilledColumn(int row, int column, String color){
+        int count = 1;
+
+        for(int i = row -1; i>=0;i--){
+            if(this.board[i][column].equals(color)){
+                count++;
+                if(count  == 4){
+                    return true;
+                }
+            }
+            else
+                break;
+        }
+
+        for(int i = row+1; i<7;i++){
+            if(this.board[i][column].equals(color)){
+                count++;
+                if(count  == 4){
+                    return true;
+                }
+            }
+            else
+                break;
+        }
+
+        return false;
+    }
+}
