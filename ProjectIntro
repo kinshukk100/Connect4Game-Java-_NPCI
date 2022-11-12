@@ -1,44 +1,158 @@
 package Connect4Game;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Connect4 {
 
-    private String board[][] = new String[7][6];
-    private boolean isPlayer1 = true;
-    private int counter = 0;
-    private int rowCounter[] = {7,7,7,7,7,7};
+    private String player1;
+    private String player2;
 
+    private String board[][];
+    private boolean isPlayer1;
+    private int counter;
+    private int columnCounter[];
+    private Set<Integer> availableColumns;
+    private String colour;
+
+    public void start(){
+        System.out.println("Welcome to the connect 4 game");
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Player1 please enter your name");
+        player1 = sc.nextLine();
+        while (player1.length() < 4){
+            System.out.println("The name should contain at least 4 characters. Please enter a valid name");
+            player1 = sc.nextLine();
+        }
+
+        System.out.println("Player2 please enter your name");
+        player1 = sc.nextLine();
+        while (player1.length() < 4){
+            System.out.println("The name should contain at least 4 characters. Please enter a valid name");
+            player1 = sc.nextLine();
+        }
+
+        loadTheGame();
+    }
+
+    private void loadTheGame(){
+        System.out.println("The game is loading");
+
+        this.board = new String[7][6];
+        this.counter = 0;
+        this.columnCounter = new int[]{7,7,7,7,7,7};
+        this.availableColumns = new LinkedHashSet<>(List.of(1,2,3,4,5,6));
+
+        for(String arr[]:this.board){
+            Arrays.fill(arr,"OPEN");
+        }
+
+        Random rand = new Random();
+        int num = rand.nextInt(2);
+        if(num == 0){
+            this.isPlayer1 = true;
+        }
+        else
+            this.isPlayer1 = false;
+
+        this.colour = "NONE";
+
+        startTheGame();
+    }
     private void startTheGame(){
         if(this.counter == 42){
             System.out.println("The Game is over. It's a draw");
             return;
         }
 
+        int column = getInput();
+
         if(isPlayer1){
-            System.out.println("Player1 please make a choice");
+            this.colour = "RED";
         }
         else{
-            System.out.println("Player2 please make a choice");
+            this.colour = "BLACK";
         }
 
-        String column = new Scanner(System.in).nextLine();
+        int row = this.columnCounter[column-1];
+        this.board[row-1][column-1] = this.colour;
 
-        if(isValid(column)){
-            int col = column.charAt(column.length()-1) - '0';
+        this.columnCounter[column-1]--;
+        if(this.columnCounter[column-1] == 0){
+            this.availableColumns.remove(column);
+        }
+
+        if(gameCompleted(row-1, column-1, this.colour)){
+            if(isPlayer1){
+                System.out.println(this.player1 + "Won the game");
+            }
+            else
+                System.out.println(this.player2 + "Won the game");
+            return;
+        }
+
+        this.isPlayer1 = !this.isPlayer1;
+        printBoard();
+        startTheGame();
+    }
+
+    private int getInput(){
+        StringBuilder availableDigits = new StringBuilder();
+
+        for(Integer num: this.availableColumns){
+            availableDigits.append(num);
+            availableDigits.append(" ");
+        }
+
+        System.out.println("The available digits are: " + availableDigits);
+
+        if(this.isPlayer1){
+            System.out.println(player1 + "please make a choice");
         }
         else{
-            column = new Scanner(System.in).nextLine();
+            System.out.println(player2 + "please make a choice");
         }
+
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+
+        while (input.length() == 0 || !Character.isDigit(input.charAt(input.length()-1)) || !this.availableColumns.contains(input.charAt(input.length()-1) - '0')){
+            if (input.length() == 0){
+                System.out.println("The input can't be empty and it has to be a digit from the following. "+ availableDigits);
+            }
+            else {
+                System.out.println("The input has to be a digit from the following. "+ availableDigits);
+            }
+            input = sc.nextLine();
+        }
+
+        int column = input.charAt(input.length()-1) - '0';
+
+        return column;
     }
 
-    public boolean isValid(String column){
-        if(column.equals("")){
-            System.out.println("Please give some input ");
+    private boolean gameCompleted(int row, int column , String colour){
+        return isFilledColumn(row, column, colour) || isFilledRow(row, column, colour) || isFilledDiagonal(row, column, colour);
+    }
+    private void printBoard(){
+        StringBuilder currentBoard = new StringBuilder();
+        int count = 0;
+
+        for(String arr[]: this.board){
+            for(String word: arr){
+                currentBoard.append(word);
+                currentBoard.append("  ");
+            }
+            count++;
+            if(count != 7){
+                currentBoard.append("\n");
+            }
         }
+
+        System.out.println(currentBoard);
     }
 
-    public boolean isFilledDiagonal(int row, int column, String color){
+    private boolean isFilledDiagonal(int row, int column, String color){
         int count = 1;
 
         for(int i=row-1; i>=0; i--){
@@ -96,7 +210,7 @@ public class Connect4 {
         return false;
     }
 
-    public boolean isFilledRow(int row, int column, String color){
+    private boolean isFilledRow(int row, int column, String color){
         int count = 1;
 
         for(int col = column -1; col>=0;col--){
@@ -123,10 +237,10 @@ public class Connect4 {
         return false;
     }
 
-    public boolean isFilledColumn(int row, int column, String color){
+    private boolean isFilledColumn(int row, int column, String color){
         int count = 1;
 
-        for(int i = row -1; i>=0;i--){
+        for(int i = row -1; i>=0; i--){
             if(this.board[i][column].equals(color)){
                 count++;
                 if(count  == 4){
