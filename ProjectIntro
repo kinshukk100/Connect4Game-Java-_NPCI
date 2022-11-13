@@ -46,7 +46,7 @@ public class Connect4 {
         this.availableColumns = new LinkedHashSet<>(List.of(1,2,3,4,5,6));
 
         for(String arr[]:this.board){
-            Arrays.fill(arr,"OPEN");
+            Arrays.fill(arr,"--");
         }
 
         Random rand = new Random();
@@ -67,39 +67,38 @@ public class Connect4 {
             return;
         }
 
-        int column = getInput();
+        this.counter++;
+        int column = getInput() - 1;
 
         if(isPlayer1){
-            this.colour = "RED";
+            this.colour = "@@";
         }
         else{
-            this.colour = "BLACK";
+            this.colour = "++";
         }
 
-        int row = this.columnCounter[column-1];
-        this.board[row-1][column-1] = this.colour;
+        int row = this.columnCounter[column] - 1;
+        this.board[row][column] = this.colour;
 
-        this.columnCounter[column-1]--;
-        if(this.columnCounter[column-1] == 0){
-            this.availableColumns.remove(column);
+        this.columnCounter[column] -= 1;
+        if(this.columnCounter[column] == 0){
+            this.availableColumns.remove(column + 1);
         }
 
         if(this.counter >= 7){
-            if(gameCompleted(row-1, column-1, this.colour)){
+            if(gameCompleted(row, column, this.colour)){
                 printBoard();
                 if(isPlayer1){
-                    System.out.println(this.player1 + "Won the game");
+                    System.out.println(this.player1 + " Won the game");
                 }
                 else
-                    System.out.println(this.player2 + "Won the game");
+                    System.out.println(this.player2 + " Won the game");
                 return;
             }
         }
 
         this.isPlayer1 = !this.isPlayer1;
         printBoard();
-        this.counter++;
-        System.out.println("The current column counter is: " + Arrays.toString(this.columnCounter));
         startTheGame();
     }
 
@@ -161,14 +160,13 @@ public class Connect4 {
 
     private boolean isFilledDiagonal(int row, int column, String color){
         int count = 1;
-
         int rowTemp = row-1;
         int colTemp = column-1;
+
         while(rowTemp >= 0 && colTemp >= 0) {
             if (this.board[rowTemp][colTemp].equals(color)) {
                 count++;
                 if (count == 4) {
-                    System.out.println("We are in diagonal top left");
                     return true;
                 }
                 rowTemp--;
@@ -178,13 +176,30 @@ public class Connect4 {
                 break;
         }
 
+        rowTemp = row + 1;
+        colTemp = column + 1;
+
+        while(rowTemp < 7 && colTemp < 6) {
+            if (this.board[rowTemp][colTemp].equals(color)) {
+                count++;
+                if (count == 4) {
+                    return true;
+                }
+                rowTemp++;
+                colTemp++;
+            }
+            else
+                break;
+        }
+
+        count = 1;
         rowTemp = row - 1;
         colTemp = column + 1;
+
         while(rowTemp >= 0 && colTemp < 6) {
             if (this.board[rowTemp][colTemp].equals(color)) {
                 count++;
                 if (count == 4) {
-                    System.out.println("We are in diagonal top right");
                     return true;
                 }
                 rowTemp--;
@@ -196,31 +211,15 @@ public class Connect4 {
 
         rowTemp = row + 1;
         colTemp = column - 1;
+
         while(rowTemp < 7 && colTemp >= 0) {
             if (this.board[rowTemp][colTemp].equals(color)) {
                 count++;
                 if (count == 4) {
-                    System.out.println("We are in diagonal bottom left");
                     return true;
                 }
                 rowTemp++;
                 colTemp--;
-            }
-            else
-                break;
-        }
-
-        rowTemp = row + 1;
-        colTemp = column + 1;
-        while(rowTemp < 7 && colTemp < 6) {
-            if (this.board[rowTemp][colTemp].equals(color)) {
-                count++;
-                if (count == 4) {
-                    System.out.println("We are in diagonal bottom right");
-                    return true;
-                }
-                rowTemp++;
-                colTemp++;
             }
             else
                 break;
@@ -236,7 +235,6 @@ public class Connect4 {
             if(this.board[row][colTemp].equals(color)){
                 count++;
                 if(count  == 4){
-                    System.out.println("We are in row left");
                     return true;
                 }
             }
@@ -248,7 +246,6 @@ public class Connect4 {
             if(this.board[row][colTemp].equals(color)){
                 count++;
                 if(count  == 4){
-                    System.out.println("We are in row right");
                     return true;
                 }
             }
@@ -265,7 +262,6 @@ public class Connect4 {
             if(this.board[rowTemp][column].equals(color)){
                 count++;
                 if(count  == 4){
-                    System.out.println("We are in column top");
                     return true;
                 }
             }
@@ -277,7 +273,6 @@ public class Connect4 {
             if(this.board[rowTemp][column].equals(color)){
                 count++;
                 if(count  == 4){
-                    System.out.println("We are in column bottom");
                     return true;
                 }
             }
