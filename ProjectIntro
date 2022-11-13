@@ -18,18 +18,20 @@ public class Connect4 {
         System.out.println("Welcome to the connect 4 game");
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Player1 please enter your name");
-        player1 = sc.nextLine();
+        System.out.println("Player1 please enter your name: ");
+        this.player1 = sc.nextLine();
+
         while (player1.length() < 4){
-            System.out.println("The name should contain at least 4 characters. Please enter a valid name");
+            System.out.println("The name should contain at least 4 characters. Please enter a valid name ");
             player1 = sc.nextLine();
         }
 
-        System.out.println("Player2 please enter your name");
-        player1 = sc.nextLine();
-        while (player1.length() < 4){
-            System.out.println("The name should contain at least 4 characters. Please enter a valid name");
-            player1 = sc.nextLine();
+        System.out.println("Player2 please enter your name: ");
+        this.player2 = sc.nextLine();
+
+        while (player2.length() < 4){
+            System.out.println("The name should contain at least 4 characters. Please enter a valid name ");
+            player2 = sc.nextLine();
         }
 
         loadTheGame();
@@ -82,17 +84,22 @@ public class Connect4 {
             this.availableColumns.remove(column);
         }
 
-        if(gameCompleted(row-1, column-1, this.colour)){
-            if(isPlayer1){
-                System.out.println(this.player1 + "Won the game");
+        if(this.counter >= 7){
+            if(gameCompleted(row-1, column-1, this.colour)){
+                printBoard();
+                if(isPlayer1){
+                    System.out.println(this.player1 + "Won the game");
+                }
+                else
+                    System.out.println(this.player2 + "Won the game");
+                return;
             }
-            else
-                System.out.println(this.player2 + "Won the game");
-            return;
         }
 
         this.isPlayer1 = !this.isPlayer1;
         printBoard();
+        this.counter++;
+        System.out.println("The current column counter is: " + Arrays.toString(this.columnCounter));
         startTheGame();
     }
 
@@ -107,10 +114,10 @@ public class Connect4 {
         System.out.println("The available digits are: " + availableDigits);
 
         if(this.isPlayer1){
-            System.out.println(player1 + "please make a choice");
+            System.out.println(player1 + " please make a choice ");
         }
         else{
-            System.out.println(player2 + "please make a choice");
+            System.out.println(player2 + " please make a choice ");
         }
 
         Scanner sc = new Scanner(System.in);
@@ -155,56 +162,68 @@ public class Connect4 {
     private boolean isFilledDiagonal(int row, int column, String color){
         int count = 1;
 
-        for(int i=row-1; i>=0; i--){
-            for(int j=column-1; j>=0; j--){
-                if(this.board[i][j].equals(color)){
-                    count++;
-                    if(count  == 4){
-                        return true;
-                    }
+        int rowTemp = row-1;
+        int colTemp = column-1;
+        while(rowTemp >= 0 && colTemp >= 0) {
+            if (this.board[rowTemp][colTemp].equals(color)) {
+                count++;
+                if (count == 4) {
+                    System.out.println("We are in diagonal top left");
+                    return true;
                 }
-                else
-                    break;
+                rowTemp--;
+                colTemp--;
             }
+            else
+                break;
         }
 
-        for(int i=row-1; i>=0; i--){
-            for(int j=column+1; j<6; j++){
-                if(this.board[i][j].equals(color)){
-                    count++;
-                    if(count  == 4){
-                        return true;
-                    }
+        rowTemp = row - 1;
+        colTemp = column + 1;
+        while(rowTemp >= 0 && colTemp < 6) {
+            if (this.board[rowTemp][colTemp].equals(color)) {
+                count++;
+                if (count == 4) {
+                    System.out.println("We are in diagonal top right");
+                    return true;
                 }
-                else
-                    break;
+                rowTemp--;
+                colTemp++;
             }
+            else
+                break;
         }
 
-        for(int i=row+1; i<7; i++){
-            for(int j=column-1; j>=0; j--){
-                if(this.board[i][j].equals(color)){
-                    count++;
-                    if(count  == 4){
-                        return true;
-                    }
+        rowTemp = row + 1;
+        colTemp = column - 1;
+        while(rowTemp < 7 && colTemp >= 0) {
+            if (this.board[rowTemp][colTemp].equals(color)) {
+                count++;
+                if (count == 4) {
+                    System.out.println("We are in diagonal bottom left");
+                    return true;
                 }
-                else
-                    break;
+                rowTemp++;
+                colTemp--;
             }
+            else
+                break;
         }
 
-        for(int i=row+1; i<7; i++){
-            for(int j=column+1; j<6; j++){
-                if(this.board[i][j].equals(color)){
-                    count++;
-                    if(count  == 4){
-                        return true;
-                    }
+        rowTemp = row + 1;
+        colTemp = column + 1;
+        while(rowTemp < 7 && colTemp < 6) {
+            if (this.board[rowTemp][colTemp].equals(color)) {
+                count++;
+                if (count == 4) {
+                    System.out.println("We are in diagonal bottom right");
+                    return true;
                 }
-                else
-                    break;
+                rowTemp++;
+                colTemp++;
             }
+            else
+                break;
         }
 
         return false;
@@ -213,10 +232,11 @@ public class Connect4 {
     private boolean isFilledRow(int row, int column, String color){
         int count = 1;
 
-        for(int col = column -1; col>=0;col--){
-            if(this.board[row][col].equals(color)){
+        for(int colTemp = column -1; colTemp>=0;colTemp--){
+            if(this.board[row][colTemp].equals(color)){
                 count++;
                 if(count  == 4){
+                    System.out.println("We are in row left");
                     return true;
                 }
             }
@@ -224,10 +244,11 @@ public class Connect4 {
                 break;
         }
 
-        for(int col = column+1; col<6;col++){
-            if(this.board[row][col].equals(color)){
+        for(int colTemp = column+1; colTemp<6;colTemp++){
+            if(this.board[row][colTemp].equals(color)){
                 count++;
                 if(count  == 4){
+                    System.out.println("We are in row right");
                     return true;
                 }
             }
@@ -240,10 +261,11 @@ public class Connect4 {
     private boolean isFilledColumn(int row, int column, String color){
         int count = 1;
 
-        for(int i = row -1; i>=0; i--){
-            if(this.board[i][column].equals(color)){
+        for(int rowTemp = row -1; rowTemp>=0; rowTemp--){
+            if(this.board[rowTemp][column].equals(color)){
                 count++;
                 if(count  == 4){
+                    System.out.println("We are in column top");
                     return true;
                 }
             }
@@ -251,10 +273,11 @@ public class Connect4 {
                 break;
         }
 
-        for(int i = row+1; i<7;i++){
-            if(this.board[i][column].equals(color)){
+        for(int rowTemp = row+1; rowTemp<7;rowTemp++){
+            if(this.board[rowTemp][column].equals(color)){
                 count++;
                 if(count  == 4){
+                    System.out.println("We are in column bottom");
                     return true;
                 }
             }
