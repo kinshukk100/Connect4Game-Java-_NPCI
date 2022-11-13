@@ -1,4 +1,4 @@
-package day10;
+package Connect4Game;
 
 public class Main {
 
