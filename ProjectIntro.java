@@ -67,7 +67,7 @@ public class Connect4 {
             return;
         }
 
-        this.counter++;
+        printBoard();
         int column = getInput() - 1;
 
         if(isPlayer1){
@@ -85,6 +85,7 @@ public class Connect4 {
             this.availableColumns.remove(column + 1);
         }
 
+        this.counter++;
         if(this.counter >= 7){
             if(gameCompleted(row, column, this.colour)){
                 printBoard();
@@ -98,7 +99,6 @@ public class Connect4 {
         }
 
         this.isPlayer1 = !this.isPlayer1;
-        printBoard();
         startTheGame();
     }
 
@@ -231,7 +231,7 @@ public class Connect4 {
     private boolean isFilledRow(int row, int column, String color){
         int count = 1;
 
-        for(int colTemp = column -1; colTemp>=0;colTemp--){
+        for(int colTemp = column -1; colTemp>=0; colTemp--){
             if(this.board[row][colTemp].equals(color)){
                 count++;
                 if(count  == 4){
@@ -242,7 +242,7 @@ public class Connect4 {
                 break;
         }
 
-        for(int colTemp = column+1; colTemp<6;colTemp++){
+        for(int colTemp = column+1; colTemp<6; colTemp++){
             if(this.board[row][colTemp].equals(color)){
                 count++;
                 if(count  == 4){
@@ -269,7 +269,7 @@ public class Connect4 {
                 break;
         }
 
-        for(int rowTemp = row+1; rowTemp<7;rowTemp++){
+        for(int rowTemp = row+1; rowTemp<7; rowTemp++){
             if(this.board[rowTemp][column].equals(color)){
                 count++;
                 if(count  == 4){
