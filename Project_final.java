@@ -164,13 +164,13 @@ class Connect4 {
             availableDigits.append(" ");
         }
 
-        System.out.println("The available digits are: " + availableDigits);
+        System.out.println("The available Columns are: " + availableDigits);
 
         if(this.isPlayer1){
-            System.out.println(player1 + " please make a choice: ");
+            System.out.println("\""+player1+"\"" + " please choose a column no. ");
         }
         else{
-            System.out.println(player2 + " please make a choice: ");
+            System.out.println("\""+player2+"\"" + " please choose a column no. ");
         }
 
         Scanner sc = new Scanner(System.in);
@@ -178,10 +178,10 @@ class Connect4 {
 
         while (input.length() == 0 || !Character.isDigit(input.charAt(input.length()-1)) || !this.availableColumns.contains(input.charAt(input.length()-1) - '0')){
             if (input.length() == 0){
-                System.out.println("The input can't be empty and it has to be a digit from the following. "+ availableDigits);
+                System.out.println("The input can't be empty and it has to be a digit from the following. "+ availableDigits+" ");
             }
             else {
-                System.out.println("The input has to be a digit from the following. "+ availableDigits);
+                System.out.println("The input has to be a digit from the following. "+ availableDigits+" ");
             }
             input = sc.nextLine();
         }
@@ -194,10 +194,14 @@ class Connect4 {
     private boolean gameCompleted(int row, int column , String colour){
         return isFilledColumn(row, column, colour) || isFilledRow(row, column, colour) || isFilledDiagonal(row, column, colour);
     }
+    
+    
     private void printBoard(){
         StringBuilder currentBoard = new StringBuilder();
         int count = 0;
-
+	currentBoard.append("1  2  3  4  5  6");
+	currentBoard.append("\n");
+	currentBoard.append("\n");
         for(String arr[]: this.board){
             for(String word: arr){
                 currentBoard.append(word);
@@ -206,7 +210,7 @@ class Connect4 {
             count++;
             if(count != 7){
                 currentBoard.append("\n");
-		currentBoard.append("\n");
+                currentBoard.append("\n");
             }
         }
 
@@ -349,7 +353,7 @@ class Connect4 {
 
 }
 
-public class Main {
+public class Project_final {
 
 	public static void main(String[] args) {
 		Connect4 game = new Connect4();
