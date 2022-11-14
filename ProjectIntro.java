@@ -15,31 +15,35 @@ public class Connect4 {
     private String colour;
 
     public void start(){
-        System.out.println("Welcome to the connect 4 game");
+        typewriter("Welcome to the connect 4 game");
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Player1 please enter your name: ");
-        this.player1 = sc.nextLine();
+        this.player1 = sc.nextLine().toUpperCase();
 
         while (player1.length() < 4){
             System.out.println("The name should contain at least 4 characters. Please enter a valid name ");
-            player1 = sc.nextLine();
+            this.player1 = sc.nextLine().toUpperCase();
         }
 
         System.out.println("Player2 please enter your name: ");
-        this.player2 = sc.nextLine();
+        this.player2 = sc.nextLine().toUpperCase();
 
-        while (player2.length() < 4){
-            System.out.println("The name should contain at least 4 characters. Please enter a valid name ");
-            player2 = sc.nextLine();
+        while (player2.length() < 4 || this.player1.equals(this.player2)){
+            if(this.player1.equals(this.player2)){
+                System.out.println("The name of player2 and player1 can't be same. Please enter a different name: ");
+            }
+            else
+                System.out.println("The name should contain at least 4 characters. Please enter a valid name ");
+
+            player2 = sc.nextLine().toUpperCase();
         }
 
         loadTheGame();
     }
 
     private void loadTheGame(){
-        System.out.println("The game is loading");
-
+        typewriter("The game is loading");
         this.board = new String[7][6];
         this.counter = 0;
         this.columnCounter = new int[]{7,7,7,7,7,7};
@@ -58,12 +62,23 @@ public class Connect4 {
             this.isPlayer1 = false;
 
         this.colour = "NONE";
-
         startTheGame();
+    }
+
+    private void typewriter(String s){
+        for (int i = 0; i <s.length(); i++) {
+            System.out.print(s.charAt(i));
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println();
     }
     private void startTheGame(){
         if(this.counter == 42){
-            System.out.println("The Game is over. It's a draw");
+            typewriter("The Game is over. It's a draw");
             return;
         }
 
@@ -90,10 +105,10 @@ public class Connect4 {
             if(gameCompleted(row, column, this.colour)){
                 printBoard();
                 if(isPlayer1){
-                    System.out.println(this.player1 + " Won the game");
+                    typewriter(this.player1 + " Won the game");
                 }
                 else
-                    System.out.println(this.player2 + " Won the game");
+                    typewriter(this.player2 + " Won the game");
                 return;
             }
         }
