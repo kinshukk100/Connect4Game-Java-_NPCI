@@ -96,6 +96,7 @@ class Connect4 {
                             "                                                                                                 \n" +
                             "                                                                                                 \n");
 
+						playAgain();
             return;
         }
 
@@ -146,7 +147,7 @@ class Connect4 {
 													"                                                                            \n" +
 													"                                                                            \n");
 								}
-
+								playAgain();
                 return;
             }
         }
@@ -335,6 +336,16 @@ class Connect4 {
 
         return false;
     }
+
+	private void playAgain(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Do you want to play again --> Yes -> y No --> enter any other key");
+        String playAgain = sc.nextLine().toUpperCase();
+        if(playAgain.equals("Y")){
+            start();
+        }
+    }
+
 }
 
 public class Main {
