@@ -206,6 +206,7 @@ class Connect4 {
             count++;
             if(count != 7){
                 currentBoard.append("\n");
+		currentBoard.append("\n");
             }
         }
 
